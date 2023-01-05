@@ -1,13 +1,15 @@
-export function doLogin(email, password) {
-    return new Promise((resonse, reject) => {
-        if (email === 'arturmoiscontato@gmail.com'
-            && password === '123456') {
-            resonse(true);
-        }
-        reject(`Invalid user and/or password!`);
-    })
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+
+export async function doLogin(email, password) {
+    const loginUrl = `${API_URL}/login`;
+    const response = await axios.post(loginUrl, { email, password });
+    return response.data;
 }
 
-export function doLogout(email, password) {
-
+export async function doLogout() {
+    const logoutUrl = `${API_URL}/logout`;
+    const response = await axios.post(logoutUrl);
+    return response.data;
 }
