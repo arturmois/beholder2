@@ -1,7 +1,7 @@
 'use strict';
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const { encrypt } = require('../src/utils/crypto');
-require('dotenv').config();
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
