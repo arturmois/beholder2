@@ -32,13 +32,14 @@ async function updateSymbol(symbol, newSymbol) {
 
 }
 
-async function syncSymbols(symbols) {
-
+async function bulkInsert(symbols) {
+    symbolModel.destroy({ truncate: true });
+    return symbolModel.bulkCreate(symbols);
 }
 
 module.exports = {
     getSymbols,
     getSymbol,
     updateSymbol,
-    syncSymbols
+    bulkInsert
 }

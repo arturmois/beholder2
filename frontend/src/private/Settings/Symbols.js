@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { getSymbols } from '../../services/SymbolsService';
+import { getSymbols, SyncSymbols } from '../../services/SymbolsService';
 import SymbolRow from './SymbolRow';
+import SelectQuote, { getDefaultQuote, filterSymbolObject, setDefaultQuote } from '../../components/SelectQuote/SelectQuote';
+
 
 function Symbols() {
 
@@ -11,13 +13,17 @@ function Symbols() {
 
     const [error, setError] = useState('');
 
+    const [quote, setQuote] = useState(getDefaultQuote());
+
     const [success, setSuccess] = useState('');
+
+    const [isSyncing, setIsSyncing] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         getSymbols(token)
             .then(symbols => {
-                setSymbols(symbols);
+                setSymbols(filterSymbolObject(symbols, quote));
             })
             .catch(err => {
                 if (err.response && err.response.status === 401) return history.push('/');
@@ -25,7 +31,25 @@ function Symbols() {
                 setError(err.message);
                 setSuccess('');
             })
-    }, [])
+    }, [isSyncing, quote])
+
+    function onSyncClic(event) {
+        const token = localStorage.getItem('token');
+        setIsSyncing(true);
+        SyncSymbols(token)
+            .then(response => setIsSyncing(false))
+            .catch(err => {
+                if (err.response && err.response.status === 401) return history.push('/');
+                console.error(err.message);
+                setError(err.message);
+                setSuccess('');
+            })
+    }
+
+    function onQuoteChange(event) {
+        setQuote(event.target.value);
+        setDefaultQuote(event.target.value);
+    }
 
     return (
         <React.Fragment>
@@ -37,6 +61,9 @@ function Symbols() {
                                 <div className="row align-items-center">
                                     <div className="col">
                                         <h2 className="fs-5 fw-bold mb-0">Symbols</h2>
+                                    </div>
+                                    <div className="col">
+                                        <SelectQuote onChange={onQuoteChange} />
                                     </div>
                                 </div>
                             </div>
@@ -57,11 +84,11 @@ function Symbols() {
                                     <tfoot>
                                         <tr>
                                             <td colSpan="2">
-                                                <button className="btn btn-primary animate-up-2" type="button">
-                                                    <svg className="icon icon-xs" fill="none" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" >
-                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                <button className="btn btn-primary animate-up-2" type="button" onClick={onSyncClic}>
+                                                    <svg className="icon icon-xs" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path>
                                                     </svg>
-                                                    Sync
+                                                    {isSyncing ? "Syncing..." : "Sync"}
                                                 </button>
                                             </td>
                                             <td>
