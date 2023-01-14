@@ -23,6 +23,12 @@ async function updateSymbol(symbol, newSymbol) {
     if (newSymbol.minLotSize && newSymbol.minLotSize !== currentSymbol.minLotSize)
         currentSymbol.minLotSize = newSymbol.minLotSize;
 
+    if (newSymbol.base && newSymbol.base !== currentSymbol.base)
+        currentSymbol.base = newSymbol.base;
+
+    if (newSymbol.quote && newSymbol.quote !== currentSymbol.quote)
+        currentSymbol.quote = newSymbol.quote;
+
     if (newSymbol.isFavorite !== null
         && newSymbol.isFavorite !== undefined
         && newSymbol.isFavorite !== currentSymbol.isFavorite)
@@ -37,9 +43,14 @@ async function bulkInsert(symbols) {
     return symbolModel.bulkCreate(symbols);
 }
 
+async function deleteSymbol(symbol) {
+    return symbolModel.destroy({ where: { symbol } });
+}
+
 module.exports = {
     getSymbols,
     getSymbol,
     updateSymbol,
-    bulkInsert
+    bulkInsert,
+    deleteSymbol
 }

@@ -1,39 +1,33 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+const SYMBOLS_URL = `${process.env.REACT_APP_API_URL}/symbols`;
 
 export async function getSymbols(token) {
-    const symbolsUrl = `${API_URL}/symbols`;
-    const headers = {
-        'authorization': token
-    }
-    const response = await axios.get(symbolsUrl, { headers });
+    const headers = { 'authorization': token };
+    const response = await axios.get(SYMBOLS_URL, { headers });
     return response.data;
 }
 
 export async function getSymbol(symbol, token) {
-    const symbolUrl = `${API_URL}/symbols/${symbol}`;
-    const headers = {
-        'authorization': token
-    }
-    const response = await axios.get(symbolUrl, { headers });
+    const headers = { 'authorization': token };
+    const response = await axios.get(`${SYMBOLS_URL}/${symbol}`, { headers });
     return response.data;
 }
 
-export async function updateSymbol(symbol, token) {
-    const symbolUrl = `${API_URL}/symbols/${symbol.symbol}`;
-    const headers = {
-        'authorization': token
-    }
-    const response = await axios.patch(symbolUrl, symbol, { headers });
+export async function updateSymbol(symbolData, token) {
+    const headers = { 'authorization': token };
+    const response = await axios.patch(`${SYMBOLS_URL}/${symbolData.symbol}`, symbolData, { headers });
     return response.data;
 }
 
-export async function SyncSymbols(token) {
-    const symbolUrl = `${API_URL}/symbols/sync`;
-    const headers = {
-        'authorization': token
-    }
-    const response = await axios.post(symbolUrl, {}, { headers });
+export async function syncSymbols(token) {
+    const headers = { 'authorization': token };
+    const response = await axios.post(`${SYMBOLS_URL}/sync`, {}, { headers });
+    return response.data;
+}
+
+export async function deleteSymbol(symbol, token) {
+    const headers = { 'authorization': token };
+    const response = await axios.delete(`${SYMBOLS_URL}/${symbol}`, { headers });
     return response.data;
 }
