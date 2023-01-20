@@ -10,6 +10,4 @@ router.patch('/:symbol', symbolsController.updateSymbol);
 
 router.post('/sync', symbolsController.syncSymbols);
 
-router.delete('/:symbol', symbolsController.deleteSymbol);
-
 module.exports = router;

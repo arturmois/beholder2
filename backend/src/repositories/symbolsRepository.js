@@ -43,14 +43,9 @@ async function bulkInsert(symbols) {
     return symbolModel.bulkCreate(symbols);
 }
 
-async function deleteSymbol(symbol) {
-    return symbolModel.destroy({ where: { symbol } });
-}
-
 module.exports = {
     getSymbols,
     getSymbol,
     updateSymbol,
-    bulkInsert,
-    deleteSymbol
+    bulkInsert
 }

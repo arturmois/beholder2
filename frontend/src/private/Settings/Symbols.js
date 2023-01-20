@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { getSymbols, syncSymbols, deleteSymbol } from '../../services/SymbolsService';
+import { getSymbols, syncSymbols } from '../../services/SymbolsService';
 import SymbolRow from './SymbolRow';
 import SelectQuote, { getDefaultQuote, filterSymbolObject, setDefaultQuote } from '../../components/SelectQuote/SelectQuote';
 import SymbolModal from './SymbolModal';
@@ -69,12 +69,6 @@ function Symbols() {
         loadSymbols();
     }
 
-    function onDeleteClick(event) {
-        const token = localStorage.getItem('token');
-        const symbol = event.target.id.replace('edit', '');
-        deleteSymbol(symbol, token)
-    }
-
     return (
         <React.Fragment>
             <div className="row">
@@ -103,7 +97,7 @@ function Symbols() {
 
                                     </thead>
                                     <tbody>
-                                        {symbols.map(item => <SymbolRow key={item.symbol} data={item} onClick={onEditSymbol} onDeleteClick={onDeleteClick} />)}
+                                        {symbols.map(item => <SymbolRow key={item.symbol} data={item} onClick={onEditSymbol} />)}
                                     </tbody>
                                     <tfoot>
                                         <tr>

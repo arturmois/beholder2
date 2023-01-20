@@ -48,16 +48,9 @@ async function syncSymbols(req, res, next) {
     res.sendStatus(201);
 }
 
-async function deleteSymbol(req, res, next) {
-    const symbol = req.params.symbol;
-    await symbolsRepository.deleteSymbol(symbol);
-    res.sendStatus(200);
-}
-
 module.exports = {
     getSymbols,
     getSymbol,
     updateSymbol,
-    syncSymbols,
-    deleteSymbol
+    syncSymbols
 }

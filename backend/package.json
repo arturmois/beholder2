@@ -25,6 +25,7 @@
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
     "node-binance-api": "^0.13.1",
-    "sequelize": "^6.28.0"
+    "sequelize": "^6.28.0",
+    "ws": "^8.12.0"
   }
 }

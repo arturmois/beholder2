@@ -25,9 +25,3 @@ export async function syncSymbols(token) {
     const response = await axios.post(`${SYMBOLS_URL}/sync`, {}, { headers });
     return response.data;
 }
-
-export async function deleteSymbol(symbol, token) {
-    const headers = { 'authorization': token };
-    const response = await axios.delete(`${SYMBOLS_URL}/${symbol}`, { headers });
-    return response.data;
-}
