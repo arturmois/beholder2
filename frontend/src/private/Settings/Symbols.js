@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getSymbols, syncSymbols } from '../../services/SymbolsService';
 import SymbolRow from './SymbolRow';
-import SelectQuote, { getDefaultQuote, filterSymbolObject, setDefaultQuote } from '../../components/SelectQuote/SelectQuote';
+import SelectQuote, { getDefaultQuote, filterSymbolObjects, setDefaultQuote } from '../../components/SelectQuote/SelectQuote';
 import SymbolModal from './SymbolModal';
 
 function Symbols() {
@@ -56,7 +56,7 @@ function Symbols() {
         const token = localStorage.getItem('token');
         getSymbols(token)
             .then(symbols => {
-                setSymbols(filterSymbolObject(symbols, quote));
+                setSymbols(filterSymbolObjects(symbols, quote));
             })
             .catch(err => errorHandling(err));
     }
@@ -88,13 +88,14 @@ function Symbols() {
                             <div className="table-responsive">
                                 <table className="table align-items-center table-flush">
                                     <thead className="thead-light">
-                                        <th className="border-bottom" scope="col">Symbol</th>
-                                        <th className="border-bottom" scope="col">Base Prec</th>
-                                        <th className="border-bottom" scope="col">Quote Prec</th>
-                                        <th className="border-bottom" scope="col">Min Notional</th>
-                                        <th className="border-bottom" scope="col">Min Lot Size</th>
-                                        <th >Actions</th>
-
+                                        <tr>
+                                            <th className="border-bottom" scope="col">Symbol</th>
+                                            <th className="border-bottom" scope="col">Base Prec</th>
+                                            <th className="border-bottom" scope="col">Quote Prec</th>
+                                            <th className="border-bottom" scope="col">Min Notional</th>
+                                            <th className="border-bottom" scope="col">Min Lot Size</th>
+                                            <th >Actions</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {symbols.map(item => <SymbolRow key={item.symbol} data={item} onClick={onEditSymbol} />)}
@@ -103,8 +104,8 @@ function Symbols() {
                                         <tr>
                                             <td colSpan="2">
                                                 <button className="btn btn-primary animate-up-2" type="button" onClick={onSyncClick}>
-                                                    <svg className="icon icon-xs" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path>
+                                                    <svg className="icon icon-xs" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path>
                                                     </svg>
                                                     {isSyncing ? "Syncing..." : "Sync"}
                                                 </button>

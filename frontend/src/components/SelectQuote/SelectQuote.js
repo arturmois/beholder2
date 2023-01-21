@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 const DEFAULT_QUOTE_PROPERTY = "defaultQuote";
+
 /**
  * props:
  * - onChange
@@ -20,13 +21,18 @@ function SelectQuote(props) {
     )
 }
 
-export function filterSymbolObject(symbols, quote) {
+export function filterSymbolObjects(symbols, quote) {
     return symbols.filter(s => {
         if (quote === 'FAVORITES')
             return s.isFavorite;
         else
             return s.symbol.endsWith(quote);
     })
+}
+
+export function filterSymbolNames(symbols, quote) {
+    return filterSymbolObjects(symbols, quote).map(s => s.symbol);
+    
 }
 
 export function getDefaultQuote() {
