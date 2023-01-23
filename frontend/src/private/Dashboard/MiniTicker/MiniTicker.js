@@ -28,7 +28,6 @@ function MiniTicker(props) {
     }, [quote])
 
     function onQuoteChange(event) {
-        console.log(event.target.value)
         setQuote(event.target.value);
     }
 
