@@ -10,6 +10,7 @@ function Settings() {
     const inputNewPassword = useRef();
     const inputConfirmPassword = useRef();
     const inputApiUrl = useRef();
+    const inputStreamUrl = useRef();
     const inputAccessKey = useRef();
     const inputSecretKey = useRef();
 
@@ -26,6 +27,7 @@ function Settings() {
             .then(settings => {
                 inputEmail.current.value = settings.email;
                 inputApiUrl.current.value = settings.apiUrl;
+                inputStreamUrl.current.value = settings.streamUrl;
                 inputAccessKey.current.value = settings.accessKey;
             })
             .catch(err => {
@@ -52,6 +54,7 @@ function Settings() {
             email: inputEmail.current.value,
             password: inputNewPassword.current.value ? inputNewPassword.current.value : null,
             apiUrl: inputApiUrl.current.value,
+            streamUrl: inputStreamUrl.current.value,
             accessKey: inputAccessKey.current.value,
             secretKey: inputSecretKey.current.value ? inputSecretKey.current.value : null,
         }, token)
@@ -123,6 +126,14 @@ function Settings() {
                                         <div className="form-group">
                                             <label htmlFor="apiUrl">API URL</label>
                                             <input ref={inputApiUrl} className="form-control" id="apiUrl" type="text" placeholder="Enter the API URL" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-sm-12 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="streamUrl">STREAM URL</label>
+                                            <input ref={inputStreamUrl} className="form-control" id="streamUrl" type="text" placeholder="Enter the STREAM URL" required />
                                         </div>
                                     </div>
                                 </div>
