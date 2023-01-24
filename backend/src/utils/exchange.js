@@ -14,6 +14,10 @@ module.exports = (settings) => {
         }
     })
 
+    function balance(){
+        return binance.balance();
+    }
+
     function exchangeInfo() {
         return binance.exchangeInfo();
     }
@@ -26,9 +30,20 @@ module.exports = (settings) => {
         binance.websockets.bookTickers(order => callback(order));
     }
 
+    function userDataStream(balanceCallback, executionCallback, listStatusCallback) {
+        binance.websockets.userData(
+            balance => balanceCallback(balance),
+            executionData => executionCallback(executionData),
+            subscribeData => console.log(`userDataStream:subscribed:  ${subscribeData}`),
+            listStatusData => listStatusCallback(listStatusData)
+        )
+    }
+
     return {
         exchangeInfo,
         miniTickerStream,
-        bookStream
+        bookStream,
+        userDataStream,
+        balance
     }
 }

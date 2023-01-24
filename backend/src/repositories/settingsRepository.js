@@ -10,8 +10,25 @@ function getSettings(id) {
     return settingsModel.findOne({ where: { id } });
 }
 
-function getDefaultSettings() {
-    return settingsModel.findOne();
+const settingsCache = {};
+async function getDecryptedSettings(id) {
+    let settings = settingsCache[id];
+
+    if (!settings) {
+        settings = await getSettings(id);
+        settings.secretKey = crypto.decrypt(settings.secretKey);
+        settingsCache[id] = settings;
+    }
+    return settings;
+}
+
+function clearSettingsCache(id) {
+    settingsCache[id] = null;
+}
+
+async function getDefaultSettings() {
+    const settings = await settingsModel.findOne();
+    return getDecryptedSettings(settings.id);
 }
 
 async function updateSettings(id, newSettings) {
@@ -34,25 +51,9 @@ async function updateSettings(id, newSettings) {
 
     if (newSettings.secretKey)
         currentSettings.secretKey = crypto.encrypt(newSettings.secretKey);
+        clearSettingsCache(id);
 
     await currentSettings.save();
-}
-
-const settingsCache = {};
-async function getDecryptedSettings(id) {
-    let settings = settingsCache[id];
-
-    if (!settings) {
-        settings = await getSettings(id);
-        settings.secretKey = crypto.decrypt(settings.secretKey);
-        settingsCache[id] = settings;
-    }
-
-    return settings;
-}
-
-function clearSettingsCache(id) {
-    settingsCache[id] = null;
 }
 
 module.exports = {
