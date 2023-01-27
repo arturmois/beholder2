@@ -26,6 +26,7 @@
     "mysql2": "^2.3.3",
     "node-binance-api": "^0.13.1",
     "sequelize": "^6.28.0",
+    "winston": "^3.8.2",
     "ws": "^8.12.0"
   }
 }

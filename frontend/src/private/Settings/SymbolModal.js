@@ -106,7 +106,7 @@ function SymbolModal(props) {
                                     ? <div className="alert alert-danger">{error}</div>
                                     : <React.Fragment></React.Fragment>
                             }
-                            <button type="submit" className="btn btn-sm btn-primary" data-bs-toggle={error ? "" : "modal"} data-bs-target="#modalSymbol" >
+                            <button type="submit" className="btn btn-sm btn-primary">
                                 Save
                             </button>
                         </div>

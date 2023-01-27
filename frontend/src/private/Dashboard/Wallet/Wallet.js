@@ -6,6 +6,7 @@ import '../Dashboard.css';
 /**
  * props:
  * - data
+ * - onUpdate
  */
 function Wallet(props) {
 
@@ -28,6 +29,7 @@ function Wallet(props) {
                     }
                 })
 
+                if (props.onUpdate) props.onUpdate(balances);
                 setBalances(balances);
             })
             .catch(err => {

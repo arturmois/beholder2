@@ -1,19 +1,14 @@
 const WebSocket = require('ws');
 const jwt = require('jsonwebtoken');
 const authController = require('./controllers/authController');
-
-function onMessage(data) {
-    console.log(`onMessage: ${data}`);
-}
+const logger = require('./utils/logger');
 
 function onError(err) {
-    console.error(`onError? ${err.message}`);
+    logger('system', `app-ws.onError: ${err.message}`);
 }
 
-function onConnection(ws, req) {
-    ws.on('message', onMessage);
-    ws.on('error', onError);
-    console.log(`onConnection`);
+function onMessage(data) {
+    logger('system', `app-ws.onMessage: ${data}`);
 }
 
 function corsValidation(origin) {
@@ -38,13 +33,28 @@ function verifyClient(info, callback) {
     return callback(false, 401);
 }
 
+function onConnection(ws, req) {
+    ws.on('message', onMessage);
+    ws.on('error', onError);
+    logger('system', `app-ws.onConnection`);
+}
+
+function broadcast(jsonObject) {
+    if (!this.clients) return;
+    this.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(jsonObject));
+        }
+    });
+}
+
 module.exports = (server) => {
     const wss = new WebSocket.Server({
         server,
         verifyClient
-    })
-
+    });
     wss.on('connection', onConnection);
-    console.log(`App Web Socket Server is running!`);
+    wss.broadcast = broadcast;
+    logger('system', `App Web Socket Server is running!`);
     return wss;
 }
