@@ -24,7 +24,7 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
-    "node-binance-api": "^0.13.1",
+    "node-binance-api": "^0.12.5",
     "sequelize": "^6.28.0",
     "winston": "^3.8.2",
     "ws": "^8.12.0"

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { getSymbol } from '../../services/SymbolsService';
 import SelectSymbol from './SelectSymbol';
 import SymbolPrice from './SymbolPrice'
@@ -7,12 +8,16 @@ import SelectSide from './SelectSide';
 import OrderType from './OrderType';
 import QuantityInput from './QuantityInput';
 import { STOP_TYPES } from '../../services/ExchangeService';
+import { insertOrder } from '../../services/OrdersService';
 
 /**
  * props:
  * - wallet
+ * -onSubmit
  */
 function NewOrderModal(props) {
+
+    const history = useHistory();
 
     const DEFAULT_ORDER = {
         symbol: "",
@@ -94,7 +99,20 @@ function NewOrderModal(props) {
 
 
     function onSubmit(event) {
-        console.log('click');
+        const token = localStorage.getItem('token');
+        insertOrder(order, token)
+            .then(result => {
+                btnClose.current.click();
+                if (props.onSubmit) props.onSubmit(result);
+            })
+            .catch(err => {
+                if (err.response && err.response.status === 401) {
+                    btnClose.current.click();
+                    return history.pushState('/');
+                }
+                console.error(err);
+                setError(err.message);
+            })
     }
 
     function onInputChange(event) {

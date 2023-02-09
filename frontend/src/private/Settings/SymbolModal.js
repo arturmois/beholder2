@@ -38,6 +38,7 @@ function SymbolModal(props) {
             .then(result => {
                 setError('');
                 props.onSubmit({ target: { id: 'symbol', value: symbol } });
+                btnClose.current.click()
             })
             .catch(err => setError(err.response ? err.response.data : err.message));
     }
