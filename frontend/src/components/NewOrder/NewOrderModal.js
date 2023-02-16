@@ -17,11 +17,13 @@ import { insertOrder } from '../../services/OrdersService';
  */
 function NewOrderModal(props) {
 
+    const [error, setError] = useState('');
+
     const history = useHistory();
 
     const DEFAULT_ORDER = {
         symbol: "",
-        price: "0",
+        limitPrice: "0",
         stopPrice: "0",
         quantity: "0",
         icebergQty: "0",
@@ -29,10 +31,11 @@ function NewOrderModal(props) {
         type: "LIMIT"
     }
 
-    const [error, setError] = useState('');
-    const [isVisible, setIsVisible] = useState(false);
     const [order, setOrder] = useState(DEFAULT_ORDER);
+
     const [symbol, setSymbol] = useState({});
+
+    const [isVisible, setIsVisible] = useState(false);
 
     const btnClose = useRef('');
     const btnSend = useRef('');
@@ -70,12 +73,11 @@ function NewOrderModal(props) {
 
         if (quantity && quantity < parseFloat(symbol.minLotSize)) {
             btnSend.current.disabled = true;
-            return setError(`Min Lot Size ${symbol.minLotSize}`);
+            return setError(`Min Lot Size: ${symbol.minLotSize}`);
         }
 
         if (order.type === 'ICEBERG') {
             const icebergQty = parseFloat(order.icebergQty);
-
             if (icebergQty && icebergQty < parseFloat(symbol.minLotSize)) {
                 btnSend.current.disabled = true;
                 return setError(`Min Lot Size (I) ${symbol.minLotSize}`);
@@ -84,18 +86,19 @@ function NewOrderModal(props) {
 
         if (!quantity) return;
 
-        const price = parseFloat(order.price);
+        const price = parseFloat(order.limitPrice);
         if (!price) return;
 
-        const total = price * quantity;
-        inputTotal.current.value = total;
+        const total = quantity * price;
+        inputTotal.current.value = `${total}`.substring(0, 8);
 
         const minNotional = parseFloat(symbol.minNotional);
         if (total < minNotional) {
             btnSend.current.disabled = true;
             return setError(`Min Notional ${symbol.minNotional}`);
         }
-    }, [order.quantity, order.price, order.icebergQty])
+
+    }, [order.limitPrice, order.quantity, order.icebergQty])
 
 
     function onSubmit(event) {
@@ -188,22 +191,22 @@ function NewOrderModal(props) {
                             <div className="row">
                                 <div className={getPriceClasses(order.type)}>
                                     <div className="form-group">
-                                        <label htmlFor="price">Unit Price</label>
-                                        <input type="number" className="form-control" id="price" placeholder={order.price} onChange={onInputChange} />
+                                        <label htmlFor="limitPrice">Limit Price:</label>
+                                        <input type="number" className="form-control" id="limitPrice" placeholder="0" onChange={onInputChange} value={order.limitPrice} />
                                     </div>
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <QuantityInput id="quantity" text="Quantity:" symbol={symbol} wallet={props.wallet} price={order.price} side={order.side} onChange={onInputChange} />
+                                    <QuantityInput id="quantity" text="Quantity:" symbol={symbol} wallet={props.wallet} price={order.limitPrice} side={order.side} onChange={onInputChange} />
                                 </div>
                             </div>
                             <div className="row">
                                 <div className={getIcebergClasses(order.type)}>
-                                    <QuantityInput id="icebergQty" text="Iceberg Qty:" symbol={symbol} wallet={props.wallet} price={order.price} side={order.side} onChange={onInputChange} />
+                                    <QuantityInput id="icebergQty" text="Iceberg Qty:" symbol={symbol} wallet={props.wallet} price={order.limitPrice} side={order.side} onChange={onInputChange} />
                                 </div>
                                 <div className={getStopPriceClasses(order.type)}>
                                     <div className="form-group">
                                         <label htmlFor="stopPrice">Stop Price:</label>
-                                        <input className="form-control" id="stopPrice" type="number" placeholder={order.stopPrice} onChange={onInputChange} />
+                                        <input className="form-control" id="stopPrice" type="number" placeholder={order.stopPrice} onChange={onInputChange} value={order.stopPrice} />
                                     </div>
                                 </div>
                                 <div className="col-md-6 mb-3">

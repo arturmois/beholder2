@@ -17,6 +17,8 @@ async function insertOrder(req, res, next) {
 
     let result;
 
+    console.log(side, symbol, quantity, limitPrice, options, automationId)
+
     try {
         if (side === 'BUY')
             result = await exchange.buy(symbol, quantity, limitPrice, options);
