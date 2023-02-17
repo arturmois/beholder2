@@ -1,8 +1,16 @@
 const symbolsRepository = require('../repositories/symbolsRepository');
 
 async function getSymbols(req, res, next) {
-    const symbols = await symbolsRepository.getSymbols();
-    res.json(symbols);
+
+    const { search, onlyFavorites, page } = req.query;
+
+    let result;
+    if (search || onlyFavorites || page)
+        result = await symbolsRepository.searchSymbols(search, onlyFavorites === 'true', page);
+    else
+        result = await symbolsRepository.getSymbols();
+
+    res.json(result);
 }
 
 async function getSymbol(req, res, next) {

@@ -30,15 +30,13 @@ function SymbolModal(props) {
     }
 
     function onSubmit(event) {
-        console.log(symbol)
-        console.log('')
         event.preventDefault();
         const token = localStorage.getItem('token');
         updateSymbol(symbol, token)
             .then(result => {
                 setError('');
-                props.onSubmit({ target: { id: 'symbol', value: symbol } });
                 btnClose.current.click()
+                props.onSubmit({ target: { id: 'symbol', value: symbol } });
             })
             .catch(err => setError(err.response ? err.response.data : err.message));
     }

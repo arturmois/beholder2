@@ -7,7 +7,7 @@ const PAGE_SIZE = 10;
  * props:
  * - count
  */
-function OrdersPagination(props) {
+function Pagination(props) {
 
     function useQuery() {
         return new URLSearchParams(useLocation().search);
@@ -52,4 +52,4 @@ function OrdersPagination(props) {
     )
 }
 
-export default OrdersPagination;
+export default Pagination;

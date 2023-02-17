@@ -14,7 +14,7 @@ function CandleChart(props) {
         const w = new window.TradingView.widget({
             symbol: "BINANCE:" + props.symbol,
             autosize: true,
-            interval: "1",
+            interval: "1W",
             timezone: "Etc/UTC",
             theme: "dark",
             style: "1",
@@ -25,9 +25,6 @@ function CandleChart(props) {
             details: true,
             withdateranges: true,
             hide_side_toolbar: false,
-            studies: [
-                "RSI@tv-basicstudies"
-            ],
             container_id: "tradingview_d34df"
         });
         setWidget(w);

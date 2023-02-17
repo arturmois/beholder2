@@ -6,7 +6,7 @@ import NewOrderModal from '../../components/NewOrder/NewOrderModal';
 import { getBalance } from '../../services/ExchangeService';
 import { getOrders } from '../../services/OrdersService';
 import OrderRow from './OrderRow';
-import OrdersPagination from './OrdersPagination';
+import Pagination from '../../components/Pagination/Pagination';
 import SearchSymbol from '../../components/SearchSymbol/SearchSymbol';
 import ViewOrderModal from './ViewOrderModal';
 
@@ -127,7 +127,7 @@ function Orders() {
                             }
                         </tbody>
                     </table>
-                    <OrdersPagination count={count} />
+                    <Pagination count={count} />
                 </div>
             </main>
             <ViewOrderModal data={viewOrder} />
