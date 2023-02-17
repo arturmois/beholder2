@@ -39,6 +39,16 @@ module.exports = (settings) => {
         return binance.cancel(symbol, orderId);
     }
 
+    function orderStatus(symbol, orderId) {
+        return binance.orderStatus(symbol, orderId);
+    }
+
+    async function orderTrade(symbol, orderId) {
+        const trades = await binance.trades(symbol);
+
+        return trades.find(t => t.orderId ===  orderId);
+    }
+
     function miniTickerStream(callback) {
         binance.websockets.miniTicker(markets => callback(markets));
     }
@@ -64,6 +74,8 @@ module.exports = (settings) => {
         balance,
         buy,
         sell,
-        cancel
+        cancel,
+        orderStatus,
+        orderTrade
     }
 }

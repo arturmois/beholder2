@@ -19,6 +19,13 @@ export async function cancelOrder(symbol, orderId, token) {
     return response.data;
 }
 
+export async function syncOrder(beholderOrderId, token) {
+    const ordersUrl = `${ORDERS_URL}${beholderOrderId}/sync`;
+    const headers = { 'authorization': token }
+    const response = await axios.post(ordersUrl, null, { headers });
+    return response.data;
+}
+
 export async function insertOrder(order, token) {
     const postOrder = {
         symbol: order.symbol.toUpperCase(),
